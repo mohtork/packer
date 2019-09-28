@@ -1,0 +1,58 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: Set hostname
+    hostname:
+      name: squid
+
+  - name: Install epel-release
+    yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+      lock_timeout: 180
+
+  - name: Update all packages on the system except the kernel
+    yum:
+      name: "*"
+      state: latest
+      exclude: kernel
+      lock_timeout: 180
+
+  - name: Install SQUID proxy
+    yum:
+     name: squid
+     state: latest
+     lock_timeout: 180
+
+  - name: Enable SQUID service
+    systemd:
+      name: squid
+      enabled: yes
+
+  - name: Copy SQUID Certificate
+    copy:
+      src: /root/squid/artifacts/cert.pem
+      dest: /etc/squid/cert.pem
+      mode: '600'
+
+  - name: Copy SQUID configuration file
+    copy:
+      src: /root/squid/artifacts/squid.conf
+      dest: /etc/squid/squid.conf
+      mode: '0644' 
+      backup: yes
+
+  - name: Copy Allowed sites file
+    copy:
+      src: /root/squid/artifacts/squid.allowed.sites.txt
+      dest: /etc/squid/squid.allowed.sites.txt
+      mode: '0644'
+      backup: yes      
+    notify:
+    - restart squid
+
+  handlers:
+    - name: restart squid
+      service:
+        name: squid
+        state: restarted

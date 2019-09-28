@@ -1,0 +1,32 @@
+{
+    "variables" : {
+        "aws_region": "{{env `AWS_REGION`}}",
+        "aws_access_key": "{{env `AWS_ACCESS_KEY`}}",
+        "aws_secret_key": "{{env `AWS_SECRET_KEY`}}",
+        "owners": "",
+        "release": "1.0"
+    },
+
+"builders": [
+        {
+            "access_key": "{{user `AWS_ACCESS_KEY`}}",
+            "ami_name": "squid-{{user `release`}}",
+            "instance_type": "t2.small",
+            "region": "{{user `AWS_REGION`}}",
+            "secret_key": "{{user `AWS_SECRET_KEY`}}",
+            "source_ami": "ami-xxxxxxxxxx",
+            "ssh_username": "ec2-user",
+            "ssh_timeout": "15m",
+            "ssh_keypair_name": "squid",
+            "ssh_private_key_file": "~/.ssh/your_key",
+            "type": "amazon-ebs"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "user": "ec2-user",
+            "playbook_file": "artifacts/playbook.yml"
+        }
+     ]
+}
