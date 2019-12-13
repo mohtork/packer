@@ -18,7 +18,7 @@
             "ssh_username": "ec2-user",
             "ssh_timeout": "15m",
             "ssh_keypair_name": "squid",
-            "ssh_private_key_file": "~/.ssh/your_key",
+            "ssh_private_key_file": "~/.ssh/squid.pem",
             "type": "amazon-ebs"
         }
     ],

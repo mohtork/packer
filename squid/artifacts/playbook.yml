@@ -31,20 +31,33 @@
 
   - name: Copy SQUID Certificate
     copy:
-      src: /root/squid/artifacts/cert.pem
+      src: /work/vstudio/github.com/packer/squid/artifacts/cert.pem
       dest: /etc/squid/cert.pem
       mode: '600'
 
   - name: Copy SQUID configuration file
     copy:
-      src: /root/squid/artifacts/squid.conf
+      src: /work/vstudio/github.com/packer/squid/artifacts/squid.conf
       dest: /etc/squid/squid.conf
       mode: '0644' 
       backup: yes
+      
+  - name: Make sure we can use htpasswd module
+    yum:
+     name: python-passlib
+     state: latest
+     lock_timeout: 180
+
+  - name: Squid Authentication
+    htpasswd:
+      path: /etc/squid/htpasswd
+      name: squid-user
+      password: 'P@ssword'
+      mode: '0644'
 
   - name: Copy Allowed sites file
     copy:
-      src: /root/squid/artifacts/squid.allowed.sites.txt
+      src: /work/vstudio/github.com/packer/squid/artifacts/squid.allowed.sites.txt
       dest: /etc/squid/squid.allowed.sites.txt
       mode: '0644'
       backup: yes      
