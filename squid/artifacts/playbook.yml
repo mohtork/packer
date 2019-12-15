@@ -31,13 +31,13 @@
 
   - name: Copy SQUID Certificate
     copy:
-      src: /work/vstudio/github.com/packer/squid/artifacts/cert.pem
+      src: ./artifacts/cert.pem
       dest: /etc/squid/cert.pem
       mode: '600'
 
   - name: Copy SQUID configuration file
     copy:
-      src: /work/vstudio/github.com/packer/squid/artifacts/squid.conf
+      src: ./artifacts/squid.conf
       dest: /etc/squid/squid.conf
       mode: '0644' 
       backup: yes
@@ -57,7 +57,7 @@
 
   - name: Copy Allowed sites file
     copy:
-      src: /work/vstudio/github.com/packer/squid/artifacts/squid.allowed.sites.txt
+      src: ./artifacts/squid.allowed.sites.txt
       dest: /etc/squid/squid.allowed.sites.txt
       mode: '0644'
       backup: yes      
